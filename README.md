@@ -7,7 +7,7 @@ image.
 Testing
 -------
 
-Put the desired ignition file at `data/test_ignition.ign`.
+Put the desired ignition file at `data/ignition/test_ignition.ign`.
 
 Run the tool using `go run cmd/main.go`.
 
