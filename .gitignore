@@ -9,3 +9,5 @@ bin/
 *.test
 
 vendor/
+
+output/
