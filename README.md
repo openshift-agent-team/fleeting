@@ -7,7 +7,8 @@ image.
 Testing
 -------
 
-Put the desired ignition file at `data/ignition/test_ignition.ign`.
+Put files to be populated by Ignition in the tree rooted at
+`data/ignition/files/`. Put systemd units in `data/ignition/systemd/units`.
 
 Run the tool using `go run cmd/main.go`.
 
