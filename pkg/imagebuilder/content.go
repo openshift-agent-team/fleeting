@@ -13,9 +13,11 @@ import (
 	"github.com/openshift-agent-team/fleeting/data"
 )
 
+// ConfigBuilder builds an Ignition config
 type ConfigBuilder struct {
 }
 
+// Ignition builds an ignition file and returns the bytes
 func (c ConfigBuilder) Ignition() ([]byte, error) {
 	var err error
 
