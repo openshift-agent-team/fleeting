@@ -21,12 +21,13 @@ type ConfigBuilder struct {
 	serviceBaseURL  string
 	infraEnvID      string
 	pullSecretToken string
+	nodeZeroIP      string
 }
 
-func New() *ConfigBuilder {
+func New(nodeZeroIP string) *ConfigBuilder {
 	pullSecret := getEnv("PULL_SECRET", "")
 	// TODO: try setting SERVICE_BASE_URL within agent.service
-	serviceBaseURL := getEnv("SERVICE_BASE_URL", "http://127.0.0.1")
+	serviceBaseURL := getEnv("SERVICE_BASE_URL", "http://"+nodeZeroIP+":8090")
 	// TODO: get id either from InfraEnv CR that is included
 	// with tool, or query the id from the REST_API
 	// curl http://SERVICE_BASE_URL/api/assisted-install/v2/infra-envs
@@ -39,6 +40,7 @@ func New() *ConfigBuilder {
 		serviceBaseURL:  serviceBaseURL,
 		infraEnvID:      infraEnvID,
 		pullSecretToken: pullSecretToken,
+		nodeZeroIP:      nodeZeroIP,
 	}
 }
 
@@ -120,7 +122,7 @@ func (c ConfigBuilder) getFiles() ([]igntypes.File, error) {
 	readDir = func(dirPath string, files []igntypes.File) ([]igntypes.File, error) {
 		entries, err := data.IgnitionData.ReadDir(path.Join("ignition/files", dirPath))
 		if err != nil {
-			return files, fmt.Errorf("Failed to open file dir \"%s\": %w", dirPath, err)
+			return files, fmt.Errorf("failed to open file dir \"%s\": %w", dirPath, err)
 		}
 		for _, e := range entries {
 			fullPath := path.Join(dirPath, e.Name())
@@ -132,8 +134,13 @@ func (c ConfigBuilder) getFiles() ([]igntypes.File, error) {
 			} else {
 				contents, err := data.IgnitionData.ReadFile(path.Join("ignition/files", fullPath))
 				if err != nil {
-					return files, fmt.Errorf("Failed to read file %s: %w", fullPath, err)
+					return files, fmt.Errorf("failed to read file %s: %w", fullPath, err)
 				}
+				templated, err := c.templateString(e.Name(), string(contents))
+				if err != nil {
+					return files, err
+				}
+
 				mode := 0600
 				if _, dirName := path.Split(dirPath); dirName == "bin" || dirName == "dispatcher.d" {
 					mode = 0555
@@ -146,7 +153,7 @@ func (c ConfigBuilder) getFiles() ([]igntypes.File, error) {
 					FileEmbedded1: igntypes.FileEmbedded1{
 						Mode: &mode,
 						Contents: igntypes.Resource{
-							Source: ignutil.StrToPtr(dataurl.EncodeBytes(contents)),
+							Source: ignutil.StrToPtr(dataurl.EncodeBytes([]byte(templated))),
 						},
 					},
 				}
@@ -165,13 +172,13 @@ func (c ConfigBuilder) getUnits() ([]igntypes.Unit, error) {
 
 	entries, err := data.IgnitionData.ReadDir(basePath)
 	if err != nil {
-		return units, fmt.Errorf("Failed to read systemd units: %w", err)
+		return units, fmt.Errorf("failed to read systemd units: %w", err)
 	}
 
 	for _, e := range entries {
 		contents, err := data.IgnitionData.ReadFile(path.Join(basePath, e.Name()))
 		if err != nil {
-			return units, fmt.Errorf("Failed to read unit %s: %w", e.Name(), err)
+			return units, fmt.Errorf("failed to read unit %s: %w", e.Name(), err)
 		}
 
 		templated, err := c.templateString(e.Name(), string(contents))
@@ -195,6 +202,7 @@ func (c ConfigBuilder) templateString(name string, text string) (string, error) 
 		"ServiceBaseURL":  c.serviceBaseURL,
 		"infraEnvId":      c.infraEnvID,
 		"PullSecretToken": c.pullSecretToken,
+		"NodeZeroIP":      c.nodeZeroIP,
 	}
 
 	tmpl, err := template.New(name).Parse(string(text))
