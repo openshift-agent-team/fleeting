@@ -1,6 +1,11 @@
 .PHONY: iso
-iso:
-	go run cmd/main.go
+
+clean:
+	rm -rf bin
+	rm -rf output
+
+iso: clean
+	go run cmd/main.go -node-zero-ip 192.168.122.2
 
 test: lint shellcheck
 
