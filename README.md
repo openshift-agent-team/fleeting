@@ -10,12 +10,12 @@ Testing
 Put files to be populated by Ignition in the tree rooted at
 `data/ignition/files/`. Put systemd units in `data/ignition/systemd/units`.
 
-The ZTP manifests provided by the users are read from `data/manifests`.
+The ZTP manifests provided by the users are read from `./manifests`.
 The required manifests are:
-* data/manifests/pull-secret.yaml
-* data/manifests/cluster-deployment.yaml
-* data/manifests/agent-cluster-install.yaml
-* data/manifests/infraenv.yaml
+* manifests/pull-secret.yaml
+* manifests/cluster-deployment.yaml
+* manifests/agent-cluster-install.yaml
+* manifests/infraenv.yaml
 
 The agent.service file requires SERVICE_BASE_URL and INFRA_ENV_ID to be set.
 The pull secret is also required and is written to /root/.docker/config.json in
