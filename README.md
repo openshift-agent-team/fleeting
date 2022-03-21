@@ -17,13 +17,6 @@ The required manifests are:
 * manifests/agent-cluster-install.yaml
 * manifests/infraenv.yaml
 
-The agent.service file requires SERVICE_BASE_URL to be set.
-For now, this is set through an environment variable.
-
-```shell
-export SERVICE_BASE_URL=http://10.0.1.10:6000
-```
-
 Run the tool using `go run cmd/main.go`.
 
 The output ISO is written to `output/fleeting.iso`.
