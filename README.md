@@ -9,6 +9,7 @@ Testing
 
 Put files to be populated by Ignition in the tree rooted at
 `data/ignition/files/`. Put systemd units in `data/ignition/systemd/units`.
+These are all built into the binary at compilation time.
 
 The ZTP manifests provided by the users are read from `./manifests`.
 The required manifests are:
@@ -16,6 +17,12 @@ The required manifests are:
 * manifests/cluster-deployment.yaml
 * manifests/agent-cluster-install.yaml
 * manifests/infraenv.yaml
+
+As a starting point for testing, you can substitute your SSH public key and
+pull secret into the [example
+manifests](https://gist.github.com/rwsu/ac65441b27fc0fe1961768db49a91262). Your
+pull secret JSON data can be [obtained from the OpenShift
+Console](https://console.redhat.com/openshift/install/pull-secret).
 
 Run the tool using `go run cmd/main.go`.
 
