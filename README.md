@@ -17,12 +17,11 @@ The required manifests are:
 * manifests/agent-cluster-install.yaml
 * manifests/infraenv.yaml
 
-The agent.service file requires SERVICE_BASE_URL and INFRA_ENV_ID to be set.
-For now, these are set through environment variables.
+The agent.service file requires SERVICE_BASE_URL to be set.
+For now, this is set through an environment variable.
 
 ```shell
 export SERVICE_BASE_URL=http://10.0.1.10:6000
-export INFRA_ENV_ID=60947297-c9a1-49ac-8119-d9656a244c83
 ```
 
 Run the tool using `go run cmd/main.go`.
