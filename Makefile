@@ -1,8 +1,9 @@
 NODE_ZERO_IP ?= 192.168.122.2
+API_VIP ?= 192.168.122.10
 
 .PHONY: iso
 iso: clean
-	go run cmd/main.go -node-zero-ip $(NODE_ZERO_IP)
+	go run cmd/main.go -node-zero-ip $(NODE_ZERO_IP) -apivip $(API_VIP)
 
 .PHONY: clean realclean
 clean:
