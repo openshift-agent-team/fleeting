@@ -5,12 +5,13 @@ After=network-online.target node-zero.service
 ConditionPathExists=/etc/assisted-service/node0
 RequiresMountsFor=
 Requires=assisted-service-db.service assisted-service.service assisted-service-ui.service
-Before=assisted-service-db.service assisted-service.service assisted-service-ui.service
+Before=agent.service assisted-service-db.service assisted-service.service assisted-service-ui.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
 Restart=on-failure
 TimeoutStopSec=70
+ExecStartPre=/bin/mkdir -p %t/assisted-agent
 ExecStartPre=/bin/rm -f %t/%n.pid %t/%N.pod-id
 ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/%n.pid --pod-id-file %t/%N.pod-id -n assisted-service --publish=8090:8090 --publish=8080:8080 --publish=8888:8888
 ExecStart=/usr/bin/podman pod start --pod-id-file=%t/%N.pod-id
