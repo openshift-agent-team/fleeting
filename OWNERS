@@ -1,4 +1,6 @@
 approvers:
+- andfasano
+- bfournie
 - celebdor
 - dhellmann
 - lranjbar
@@ -7,6 +9,8 @@ approvers:
 - zaneb
 options: {}
 reviewers:
+- andfasano
+- bfournie
 - celebdor
 - dhellmann
 - lranjbar

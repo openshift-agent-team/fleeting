@@ -28,7 +28,7 @@ Run the tool using `go run cmd/main.go`.
 
 The output ISO is written to `output/fleeting.iso`.
 
-Boot the ISO in a VM with at least 4096MiB of RAM. No storage is required.
+Boot the ISO in a VM with at least 8192MiB of RAM. No storage is required.
 The assisted-service UI is available on port 8080.
 
 Node0
