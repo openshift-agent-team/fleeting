@@ -1,5 +1,3 @@
-NODE_ZERO_IP ?= 192.168.122.2
-
 .PHONY: iso
 iso: clean
 	go run cmd/main.go
