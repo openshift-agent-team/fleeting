@@ -38,7 +38,10 @@ type ConfigBuilder struct {
 
 func New() *ConfigBuilder {
 	pullSecret := manifests.GetPullSecret()
-	nodeZeroIP := manifests.GetNodeZeroIP()
+
+	n := manifests.NewNMConfig()
+	nodeZeroIP := n.GetNodeZeroIP()
+
 	// TODO: needs appropriate value if AUTH_TYPE != none
 	pullSecretToken := getEnv("PULL_SECRET_TOKEN", "")
 
