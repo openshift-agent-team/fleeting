@@ -18,9 +18,8 @@ require (
 	github.com/vincent-petithory/dataurl v1.0.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	k8s.io/api v0.21.1
-	k8s.io/apimachinery v0.21.1 // indirect
-	sigs.k8s.io/structured-merge-diff/v4 v4.1.0 // indirect
-	sigs.k8s.io/yaml v1.3.0
+	k8s.io/apimachinery v0.23.5
+	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
 replace (
