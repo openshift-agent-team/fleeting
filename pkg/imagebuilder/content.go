@@ -17,6 +17,7 @@ import (
 	"github.com/openshift-agent-team/fleeting/pkg/manifests"
 
 	"github.com/openshift/assisted-service/models"
+	"github.com/sirupsen/logrus"
 )
 
 const NMCONNECTIONS_DIR = "/etc/assisted/network"
@@ -47,17 +48,17 @@ func New() *ConfigBuilder {
 	clusterParams := manifests.CreateClusterParams()
 	clusterJSON, err := json.Marshal(clusterParams)
 	if err != nil {
-		fmt.Errorf("Error marshalling cluster params into json: %w", err)
+		logrus.Errorf("Error marshalling cluster params into json: %w", err)
 	}
 
 	infraEnvParams, err := manifests.CreateInfraEnvParams()
 	if err != nil {
-		fmt.Errorf("Error building infra env params: %w", err)
+		logrus.Errorf("Error building infra env params: %w", err)
 	}
 
 	infraEnvJSON, err := json.Marshal(infraEnvParams)
 	if err != nil {
-		fmt.Errorf("Error marshal infra env params into json: %w", err)
+		logrus.Errorf("Error marshal infra env params into json: %w", err)
 	}
 
 	aci := manifests.GetAgentClusterInstall()
