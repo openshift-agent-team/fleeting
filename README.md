@@ -17,6 +17,7 @@ The required manifests are:
 * manifests/cluster-deployment.yaml
 * manifests/agent-cluster-install.yaml
 * manifests/infraenv.yaml
+* manifests/nmstateconfig.yaml
 
 As a starting point for testing, you can substitute your SSH public key and
 pull secret into the [example
