@@ -11,7 +11,7 @@ realclean: clean
 	rm -rf output
 
 .PHONY: test
-test: lint shellcheck
+test: lint shellcheck unit-test
 
 .PHONY: lint
 lint:
@@ -20,3 +20,7 @@ lint:
 .PHONY: shellcheck
 shellcheck:
 	shellcheck $(shell find . -name '*.sh')
+
+.PHONY: unit-test
+unit-test:
+	go test -v ./...
