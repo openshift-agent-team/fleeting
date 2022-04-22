@@ -1,0 +1,102 @@
+---
+apiVersion: agent-install.openshift.io/v1beta1
+kind: NMStateConfig
+metadata:
+  name: mynmstateconfig01
+  namespace: openshift-machine-api
+  labels:
+    cluster0-nmstate-label-name: cluster0-nmstate-label-value
+spec:
+  config:
+    interfaces:
+      - name: eth0
+        type: ethernet
+        state: up
+        mac-address: 52:54:01:aa:aa:a1
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.122.2
+              prefix-length: 24
+          dhcp: false
+    dns-resolver:
+      config:
+        server:
+          - 192.168.126.1
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.126.1
+          next-hop-interface: eth0
+          table-id: 254
+  interfaces:
+    - name: "eth0"
+      macAddress: 52:54:01:aa:aa:a1
+---
+apiVersion: agent-install.openshift.io/v1beta1
+kind: NMStateConfig
+metadata:
+  name: mynmstateconfig02
+  namespace: openshift-machine-api
+  labels:
+    cluster0-nmstate-label-name: cluster0-nmstate-label-value
+spec:
+  config:
+    interfaces:
+      - name: eth0
+        type: ethernet
+        state: up
+        mac-address: 52:54:01:bb:bb:b1
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.122.3
+              prefix-length: 24
+          dhcp: false
+    dns-resolver:
+      config:
+        server:
+          - 192.168.126.1
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.126.1
+          next-hop-interface: eth0
+          table-id: 254
+  interfaces:
+    - name: "eth0"
+      macAddress: 52:54:01:bb:bb:b1
+---
+apiVersion: agent-install.openshift.io/v1beta1
+kind: NMStateConfig
+metadata:
+  name: mynmstateconfig03
+  namespace: openshift-machine-api
+  labels:
+    cluster0-nmstate-label-name: cluster0-nmstate-label-value
+spec:
+  config:
+    interfaces:
+      - name: eth0
+        type: ethernet
+        state: up
+        mac-address: 52:54:01:cc:cc:c1
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.122.4
+              prefix-length: 24
+          dhcp: false
+    dns-resolver:
+      config:
+        server:
+          - 192.168.126.1
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.126.1
+          next-hop-interface: eth0
+          table-id: 254
+  interfaces:
+    - name: "eth0"
+      macAddress: 52:54:01:cc:cc:c1

@@ -1,0 +1,22 @@
+apiVersion: extensions.hive.openshift.io/v1beta1
+kind: AgentClusterInstall
+metadata:
+  name: test-agent-cluster-install
+  namespace: cluster0
+spec:
+  apiVIP: 192.168.122.10
+  ingressVIP: 192.168.122.11
+  clusterDeploymentRef:
+    name: tets-cluster
+  imageSetRef:
+    name: openshift-v4.10.0
+  networking:
+    clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+    serviceNetwork:
+    - 172.30.0.0/16
+  provisionRequirements:
+    controlPlaneAgents: 3
+    workerAgents: 2
+  sshPublicKey: '<YOUR_SSH_PUBLIC_KEY>'

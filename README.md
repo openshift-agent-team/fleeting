@@ -12,20 +12,19 @@ Put files to be populated by Ignition in the tree rooted at
 These are all built into the binary at compilation time.
 
 The ZTP manifests provided by the users are read from `./manifests`.
-The required manifests are:
-* manifests/pull-secret.yaml
-* manifests/cluster-deployment.yaml
-* manifests/agent-cluster-install.yaml
-* manifests/infraenv.yaml
-* manifests/nmstateconfig.yaml
+The required sample manifests are:
+* [pull-secret.yaml](./manifests/samples/pull-secret.yaml)
+   - Your pull secret JSON data can be [obtained from the OpenShift Console](https://console.redhat.com/openshift/install/pull-secret).
+* [cluster-deployment.yaml](./manifests/samples/cluster-deployment.yaml)
+* [agent-cluster-install.yaml](./manifests/samples/agent-cluster-install.yaml)
+* [infraenv.yaml](./manifests/samples/infraenv.yaml)
+* [nmstateconfig.yaml](./manifests/samples/nmstateconfig.yaml)
+ <br>Note: Atleast one NmStateConfig should be defined which is used to identify and set node0. At the max, the cluster can have one NmStateConfigs per node.
+ - To create a 3 masters compact cluster, set `spec.provisionRequirements.controlPlaneAgents` to `3` in AgentClusterInstall.
+ - To create additional workers, set `spec.provisionRequirements.workerAgents` in AgentClusterInstall.
+ - To create an SNO cluster, set `spec.provisionRequirements.controlPlaneAgents` to `1` in AgentClusterInstall and no worker agents. Also, do not set `spec.ingressVIP` in AgentClusterInstall.
 
-As a starting point for testing, you can substitute your SSH public key and
-pull secret into the [example
-manifests](https://gist.github.com/rwsu/ac65441b27fc0fe1961768db49a91262). Your
-pull secret JSON data can be [obtained from the OpenShift
-Console](https://console.redhat.com/openshift/install/pull-secret).
-
-Run the tool using `go run cmd/main.go`.
+Run the tool using `make iso`.
 
 The output ISO is written to `output/fleeting.iso`.
 
