@@ -17,6 +17,7 @@ The required manifests are:
 * manifests/cluster-deployment.yaml
 * manifests/agent-cluster-install.yaml
 * manifests/infraenv.yaml
+* manifests/nmstateconfig.yaml
 
 As a starting point for testing, you can substitute your SSH public key and
 pull secret into the [example
@@ -34,39 +35,46 @@ The assisted-service UI is available on port 8080.
 Node0
 -------
 
-To run the assisted service only on a pre-determined node a.k.a. node0, currently we have hardcoded a static IP 192.168.122.2. 
-A systemd service named `node-zero.service` looks for the static IP and if the current node's IP matches with it then only the `assisted-service.service` systemd service is startred. The `assisted-service.service` is responsible for running the assisted service.
-
-To set the static ip in libvirt:
-1. Edit the default network
-```
-virsh net-edit default
-```
-2. Add `dns` and `host mac` for node0
+To run the assisted service only on a pre-determined node a.k.a. node0, the node0 IP must be defined in nmstateconfig.yaml with a mac address that matches that node, for example:
 
 ```
-<network>
-  <name>default</name>
-  <uuid>2467ce0f-aff2-4031-b0be-3e40fca96421</uuid>
-  <forward mode='nat'/>
-  <bridge name='virbr0' stp='on' delay='0'/>
-  <mac address='52:54:00:bf:2b:d4'/>
-  <dns>
-    <host ip='192.168.122.2'>
-      <hostname>node0</hostname>
-    </host>
-  </dns>
-  <ip address='192.168.122.1' netmask='255.255.255.0'>
-    <dhcp>
-      <range start='192.168.122.2' end='192.168.122.254'/>
-      <host mac='52:54:00:aa:aa:aa' ip='192.168.122.2'/>
-    </dhcp>
-  </ip>
-</network>
-```
-3. Destroy and start network
-```
-sudo virsh net-destroy default
-sudo virsh net-start default
+apiVersion: agent-install.openshift.io/v1beta1
+kind: NMStateConfig
+metadata:
+  name: mynmstateconfig
+  namespace: spoke-cluster
+  labels:
+    cluster0-nmstate-label-name: cluster0-nmstate-label-value
+spec:
+  config:
+    interfaces:
+      - name: eth0
+        type: ethernet
+        state: up
+        mac-address: 52:54:01:aa:aa:a1
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.122.2
+              prefix-length: 24
+          dhcp: false
+    dns-resolver:
+      config:
+        server:
+          - 192.168.122.1
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.122.1
+          next-hop-interface: eth0
+          table-id: 254
+  interfaces:
+    - name: "eth0"
+      macAddress: "52:54:01:aa:aa:a1"
 ```
 
+A systemd service named `node-zero.service` looks for the static IP and if the current node's IP matches with it then only the `assisted-service.service` systemd service is started. The `assisted-service.service` is responsible for running the assisted service. In order to supply a hostname to this node a DNS entry must be added as its currently not possible to configure the hostname in a manifest file.
+
+For the other nodes, besides node0, the IP addresses can either be statically defined in nmstateconfig.yaml (recommended), or added as DHCP entries.
+
+To add the IP addresses to nmstateconfig.yaml add another entry for `kind: NMStateConfig` similar to node0 separated by the YAML separator `---`. DNS entries must also be added for these additional nodes.
