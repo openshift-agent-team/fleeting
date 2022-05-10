@@ -1,8 +1,13 @@
 Fleeting
 ========
 
-This is a prototype of a tool to generate an ephemeral OpenShift installation
-image.
+**Development has moved to the [OpenShift Installer](https://github.com/openshift/installer/tree/agent-installer).**
+
+Fleeting was a prototype of the agent-based installer - a tool to generate an
+ephemeral OpenShift installation image. Development has moved to the
+`agent-installer` branch of the
+[openshift/installer](https://github.com/openshift/installer/tree/agent-installer)
+repo, and will eventually merge into the main installer.
 
 Testing
 -------
